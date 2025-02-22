@@ -90,7 +90,7 @@ const Footer = () => {
             &copy; 2024 E-store. All rights reserved.
           </Typography>
           <Typography variant="body2" component="p" align="center">
-            DC: 828 Sư Vạn Hạnh.
+            D/C: 828 Sư Vạn Hạnh.
           </Typography>
           <Typography variant="body2" component="p" align="center">
             Icon made by {' '}

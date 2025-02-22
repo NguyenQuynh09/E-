@@ -2,9 +2,9 @@ export const singleFilter=[
     {id: "price",
     name: "Price",
     options: [
-        { value: "250000-300000", label: "250000 to 300000"},
-        {value: "250000-300000", label: "250000 to 300000"},
-        {value: "250000-300000", label: "250000 to 300000"},
+        { value: "250,000 VND-300,000 VND", label: "250,000 VND-300,000 VND"},
+        {value: "250,000 VND-300,000 VND", label: "250,000 VND-300,000 VND"},
+        {value: "250,000 VND-300,000 VND", label: "250,000 VND-300,000 VND"},
 
     ],
 },
@@ -40,4 +40,3 @@ export const sortOptions = [
 { name: "Price: Low to High", query: "Price_low", current: false },
 { name: "Price: High to Low", query: "Price_high", current: false },
 ]
-
