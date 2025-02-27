@@ -349,7 +349,7 @@ export default function Navigation() {
                 <span className="sr-only">Công ty</span>
                 <img
                   alt=""
-                  src="https://tailwindui.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
+                  src="https://i.postimg.cc/mDNy3Bty/e-store.png"
                   className="h-8 w-8 mr-2"
                 />
               </div>
