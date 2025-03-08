@@ -1,6 +1,6 @@
 "use client";
-import { FormControl, FormLabel, RadioGroup, FormControlLabel, Radio } from "@mui/material";
-import { Fragment, useState } from "react";
+import { FormControl, FormLabel, RadioGroup, FormControlLabel, Radio, colors } from "@mui/material";
+import { Fragment, useEffect, useState } from "react";
 import {
   Dialog,
   DialogBackdrop,
@@ -26,7 +26,12 @@ import { Sm_Tablet } from "../../../Data/Sm_Tablet";
 import ProductCard from "./ProductCard";
 import { singleFilter } from "./FilterData";
 import FilterListIcon from '@mui/icons-material/FilterList';
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { Category, Sort } from "@mui/icons-material";
+import { useDispatch, useSelector } from "react-redux";
+import { findProducts } from "../../../State/Product/Action";
+import Pagination from '@mui/material/Pagination';
+import { store } from "../../../State/store";
 
 const sortOptions = [
   { name: "Price: Low to High", href: "#", current: false },
@@ -41,6 +46,34 @@ export default function Product() {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const location = useLocation()
   const navigate = useNavigate()
+  const param = useParams();
+  const dispatch = useDispatch();
+  const {product} = useSelector(store => store)
+
+
+
+
+  const decodedQueryString=decodeURIComponent(location.search);
+  const searchParamms= new URLSearchParams(decodedQueryString);
+  const colorValue = searchParamms.get("color")
+  const sizeValue = searchParamms.get("size")
+  const priceValue = searchParamms.get("price")
+  const discount = searchParamms.get("discount")
+  const sortValue = searchParamms.get("sort");
+  const pageNumber = searchParamms.get("page") || 1;
+  const stock = searchParamms.get("stock");
+
+  const handlePaginationChange=(event,value)=>{
+    const searchParamms = new URLSearchParams(location.search)
+    searchParamms.set("page",value);
+    const query = searchParamms.toString();
+    navigate({search:`?${query}`})
+
+  }
+
+
+
+
   const handleFilter = (value , sectionId) =>{
     const searchParamms = new URLSearchParams(location.search)
     let filterValue = searchParamms.getAll(sectionId)
@@ -69,6 +102,36 @@ export default function Product() {
     const query = searchParamms.toString();
     navigate({search:`?${query}`})
   }
+
+  useEffect(()=>{
+      const [minPrice,maxPrice]=priceValue===null?[0,1000000]:priceValue.split("-").map(Number);
+      const data = {
+        category:param.lavelThree,
+        colors:colorValue || [],
+        sizes:sizeValue| [],
+        minPrice,
+        maxPrice,
+        minDiscount:discount || 0 ,
+        sort:sortValue || "price_low",
+        pageNumber:pageNumber -1,
+        pageSize:10,
+        stock:stock
+
+      }
+      dispatch(findProducts(data))
+
+
+
+  },[param.lavelThree,
+    colorValue,
+    //sizeValue,
+    priceValue,
+    discount,
+    sortValue,
+    stock,
+    pageNumber
+  ])
+
 
   return (
     <div className="bg-white">
@@ -340,13 +403,18 @@ export default function Product() {
             {/* Product grid */}
             <div className="lg:col-span-4 w-full">
               <div className="flex flex-wrap justify-center bg-white py-5">
-                {Sm_Tablet.map((item) =>
+                {Product.products && Product.products?.content?.map((item) => 
                   <ProductCard product={item} />)}
               </div>
             </div>
 
           </div>
 
+        </section>
+        <section className="w-full px=[3.6rem]">
+          <div className="px-4 py-5 flex justify-center">
+          <Pagination count={product.products?.totalPages} color="secondary" onChange={handlePaginationChange} />
+          </div>
         </section>
       </main>
     </div>
